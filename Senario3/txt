@@ -1,0 +1,113 @@
+package Senario3;
+
+import java.util.Scanner;
+
+enum VehicleType {
+    TRUCK, SHIP, AIRPLANE
+}
+
+abstract class LogisticCompanyVehicelType {
+    protected double vehicleWeight;
+    protected double vehicleDistance;
+
+    public LogisticCompanyVehicelType(double vehicleWeight, double vehicleDistance) {
+        this.vehicleWeight = vehicleWeight;
+        this.vehicleDistance = vehicleDistance;
+    }
+
+    public abstract void vehicleCalculations();
+}
+
+class Truck extends LogisticCompanyVehicelType {
+    public Truck(double vehicleWeight, double vehicleDistance) {
+        super(vehicleWeight, vehicleDistance);
+    }
+
+    @Override
+    public void vehicleCalculations() {
+        double cost = vehicleDistance * 5 + vehicleWeight * 2;
+        System.out.println("Cost: " + cost);
+    }
+}
+
+class Ship extends LogisticCompanyVehicelType {
+    public Ship(double vehicleWeight, double vehicleDistance) {
+        super(vehicleWeight, vehicleDistance);
+    }
+
+    @Override
+    public void vehicleCalculations() {
+        double cost = vehicleDistance * 3 + vehicleWeight * 1.5;
+        System.out.println("Cost: " + cost);
+    }
+}
+
+class Airplane extends LogisticCompanyVehicelType {
+    public Airplane(double vehicleWeight, double vehicleDistance) {
+        super(vehicleWeight, vehicleDistance);
+    }
+
+    @Override
+    public void vehicleCalculations() {
+        double cost = vehicleDistance * 10 + vehicleWeight * 5;
+        System.out.println("Cost: " + cost);
+    }
+}
+
+class VehicleFactory {
+    public static LogisticCompanyVehicelType createVehicle(VehicleType type, double weight, double distance) {
+        switch (type ) {
+            case TRUCK:
+                return new Truck(weight, distance);
+            case SHIP:
+                return new Ship(weight, distance);
+            case AIRPLANE:
+                return new Airplane(weight, distance);
+            default:
+                throw new IllegalArgumentException("Invalid vehicle type");
+        }
+    }
+}
+
+public class Senario3 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        double vehicleWeight = readDouble(sc, "Enter the vehicle weight (in kg): ");
+        double vehicleDistance = readDouble(sc, "Enter the vehicle distance (in km): ");
+        VehicleType vehicleType = readVehicleType(sc);
+
+        LogisticCompanyVehicelType vehicle = VehicleFactory.createVehicle(vehicleType, vehicleWeight, vehicleDistance);
+        vehicle.vehicleCalculations();
+
+        sc.close(); // Close the scanner
+    }
+
+    public static double readDouble(Scanner sc, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (sc.hasNextDouble()) {
+                return sc.nextDouble();
+            } else {
+                System.out.println("Invalid input. Please enter a numeric value.");
+                sc.next(); // Clear the invalid input
+            }
+        }
+    }
+
+    public static VehicleType readVehicleType(Scanner sc) {
+        while (true) {
+            System.out.println("1. Truck");
+            System.out.println("2. Ship");
+            System.out.println("3. Airplane");
+            System.out.print("Enter the vehicle type (1-3): ");
+            int choice = sc.nextInt();
+            switch (choice) {
+                case 1: return VehicleType.TRUCK;
+                case 2: return VehicleType.SHIP;
+                case 3: return VehicleType.AIRPLANE;
+                default: System.out.println("Invalid Vehicle Type. Please try again.");
+            }
+        }
+    }
+}
